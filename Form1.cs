@@ -1272,5 +1272,13 @@ namespace ChargesModel
             ComputeForces(trych);
             trych.Move();
         }
+
+        private void ClearTrajectories_Click(object sender, EventArgs e)
+        {
+            foreach (Charge item in charges)
+            {
+                item.traj.Clear();
+            }
+        }
     }
 }
