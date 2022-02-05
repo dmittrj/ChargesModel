@@ -121,6 +121,7 @@ namespace ChargesModel
             this.charge8_PB = new System.Windows.Forms.PictureBox();
             this.charge9_PB = new System.Windows.Forms.PictureBox();
             this.Blackboard = new System.Windows.Forms.PictureBox();
+            this.LineMap = new System.Windows.Forms.PictureBox();
             this.menuStrip1.SuspendLayout();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.NumLawLB)).BeginInit();
@@ -139,6 +140,7 @@ namespace ChargesModel
             ((System.ComponentModel.ISupportInitialize)(this.charge8_PB)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.charge9_PB)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Blackboard)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.LineMap)).BeginInit();
             this.SuspendLayout();
             // 
             // menuStrip1
@@ -209,25 +211,25 @@ namespace ChargesModel
             // информацияToolStripMenuItem
             // 
             this.информацияToolStripMenuItem.Name = "информацияToolStripMenuItem";
-            this.информацияToolStripMenuItem.Size = new System.Drawing.Size(150, 22);
+            this.информацияToolStripMenuItem.Size = new System.Drawing.Size(195, 22);
             this.информацияToolStripMenuItem.Text = "Информация";
             // 
             // создатьЗарядToolStripMenuItem
             // 
             this.создатьЗарядToolStripMenuItem.Name = "создатьЗарядToolStripMenuItem";
-            this.создатьЗарядToolStripMenuItem.Size = new System.Drawing.Size(147, 6);
+            this.создатьЗарядToolStripMenuItem.Size = new System.Drawing.Size(192, 6);
             // 
             // CreateChargeFromMenu
             // 
             this.CreateChargeFromMenu.Name = "CreateChargeFromMenu";
-            this.CreateChargeFromMenu.Size = new System.Drawing.Size(150, 22);
+            this.CreateChargeFromMenu.Size = new System.Drawing.Size(195, 22);
             this.CreateChargeFromMenu.Text = "Создать заряд";
             this.CreateChargeFromMenu.Click += new System.EventHandler(this.CreateChargeFromMenu_Click);
             // 
             // DeleteAllCharges
             // 
             this.DeleteAllCharges.Name = "DeleteAllCharges";
-            this.DeleteAllCharges.Size = new System.Drawing.Size(150, 22);
+            this.DeleteAllCharges.Size = new System.Drawing.Size(195, 22);
             this.DeleteAllCharges.Text = "Удалить все";
             this.DeleteAllCharges.Click += new System.EventHandler(this.DeleteAllCharges_Click);
             // 
@@ -260,42 +262,42 @@ namespace ChargesModel
             this.WhiteCharges.Checked = true;
             this.WhiteCharges.CheckState = System.Windows.Forms.CheckState.Checked;
             this.WhiteCharges.Name = "WhiteCharges";
-            this.WhiteCharges.Size = new System.Drawing.Size(152, 22);
+            this.WhiteCharges.Size = new System.Drawing.Size(180, 22);
             this.WhiteCharges.Text = "Белые";
             this.WhiteCharges.Click += new System.EventHandler(this.WhiteCharges_Click);
             // 
             // SignCharges
             // 
             this.SignCharges.Name = "SignCharges";
-            this.SignCharges.Size = new System.Drawing.Size(152, 22);
+            this.SignCharges.Size = new System.Drawing.Size(180, 22);
             this.SignCharges.Text = "Знак";
             this.SignCharges.Click += new System.EventHandler(this.SignCharges_Click);
             // 
             // VelocityCharges
             // 
             this.VelocityCharges.Name = "VelocityCharges";
-            this.VelocityCharges.Size = new System.Drawing.Size(152, 22);
+            this.VelocityCharges.Size = new System.Drawing.Size(180, 22);
             this.VelocityCharges.Text = "Скорость";
             this.VelocityCharges.Click += new System.EventHandler(this.VelocityCharges_Click);
             // 
             // ForceCharges
             // 
             this.ForceCharges.Name = "ForceCharges";
-            this.ForceCharges.Size = new System.Drawing.Size(152, 22);
+            this.ForceCharges.Size = new System.Drawing.Size(180, 22);
             this.ForceCharges.Text = "Сила";
             this.ForceCharges.Click += new System.EventHandler(this.ForceCharges_Click);
             // 
             // EnergyCharges
             // 
             this.EnergyCharges.Name = "EnergyCharges";
-            this.EnergyCharges.Size = new System.Drawing.Size(152, 22);
+            this.EnergyCharges.Size = new System.Drawing.Size(180, 22);
             this.EnergyCharges.Text = "Заряд";
             this.EnergyCharges.Click += new System.EventHandler(this.EnergyCharges_Click);
             // 
             // DifferentColorsCharges
             // 
             this.DifferentColorsCharges.Name = "DifferentColorsCharges";
-            this.DifferentColorsCharges.Size = new System.Drawing.Size(152, 22);
+            this.DifferentColorsCharges.Size = new System.Drawing.Size(180, 22);
             this.DifferentColorsCharges.Text = "Разноцветные";
             this.DifferentColorsCharges.Click += new System.EventHandler(this.DifferentColorsCharges_Click);
             // 
@@ -826,6 +828,7 @@ namespace ChargesModel
             // 
             // timer2
             // 
+            this.timer2.Interval = 50;
             this.timer2.Tick += new System.EventHandler(this.timer2_Tick);
             // 
             // hint_label
@@ -982,6 +985,16 @@ namespace ChargesModel
             this.Blackboard.Size = new System.Drawing.Size(141, 126);
             this.Blackboard.TabIndex = 17;
             this.Blackboard.TabStop = false;
+            this.Blackboard.Visible = false;
+            // 
+            // LineMap
+            // 
+            this.LineMap.Location = new System.Drawing.Point(897, 452);
+            this.LineMap.Name = "LineMap";
+            this.LineMap.Size = new System.Drawing.Size(141, 126);
+            this.LineMap.TabIndex = 18;
+            this.LineMap.TabStop = false;
+            this.LineMap.Visible = false;
             // 
             // Form1
             // 
@@ -990,6 +1003,7 @@ namespace ChargesModel
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(40)))), ((int)(((byte)(40)))));
             this.ClientSize = new System.Drawing.Size(1124, 627);
             this.ContextMenuStrip = this.contextMenuStrip1;
+            this.Controls.Add(this.LineMap);
             this.Controls.Add(this.Blackboard);
             this.Controls.Add(this.charge9_PB);
             this.Controls.Add(this.charge8_PB);
@@ -1033,6 +1047,7 @@ namespace ChargesModel
             ((System.ComponentModel.ISupportInitialize)(this.charge8_PB)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.charge9_PB)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.Blackboard)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.LineMap)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1131,6 +1146,7 @@ namespace ChargesModel
         private System.Windows.Forms.ToolStripMenuItem ShowTrajectoryDots;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Button CloseSettings;
+        private System.Windows.Forms.PictureBox LineMap;
     }
 }
 

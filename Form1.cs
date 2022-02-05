@@ -40,6 +40,11 @@ namespace ChargesModel
             return value;
         }
 
+        public static int ZeroAway(int num)
+        {
+            if (num == 0) return 1; return num;
+        }
+
         public class Charge {
             public float Energy;
             public float Mass;
@@ -87,11 +92,13 @@ namespace ChargesModel
                 BuVelocity = Velocity;
             }
 
-            public void Restore()
+            public bool Restore()
             {
                 X = BuX;
                 Y = BuY;
                 Velocity = BuVelocity;
+                if ((X == 0) && (Y == 0)) return false;
+                return true;
             }
 
             public int GetVelocity()
@@ -101,7 +108,7 @@ namespace ChargesModel
 
             public int GetForce()
             {
-                return (int)Math.Sqrt(Force.x * Force.x + Force.y * Force.y);
+                return (int)Math.Sqrt(LastForce.x * LastForce.x + LastForce.y * LastForce.y);
             }
 
             public void DrawColor()
@@ -279,13 +286,14 @@ namespace ChargesModel
             PauseSimulation.Enabled = true;
             StopSimulation.Enabled = true;
             StartSimulation.Enabled = false;
-            StartSimulation.Text = "Запустить симуляцию";
             hints.Push("Симуляция запущена");
             hint_label.Text = hints.Peek();
+            if (StartSimulation.Text == "Запустить симуляцию")
             foreach (Charge item in charges)
             {
                 item.BackUp();
             }
+            StartSimulation.Text = "Запустить симуляцию";
             timer1.Start();
         }
 
@@ -302,6 +310,7 @@ namespace ChargesModel
             Bitmap board = new Bitmap(Width, Height);
 
 
+
             if (DisplayForces == 2)
             {
                 using (Graphics gline = Graphics.FromImage(board))
@@ -309,6 +318,7 @@ namespace ChargesModel
                     //gline.Clear(Color.FromArgb(40, 40, 40));
                     Pen penline = new Pen(Brushes.LightBlue, 2);
                     foreach (Charge item in charges) {
+                        if (item.IsPinned) continue;
                         gline.DrawLine(penline, new Point((int)item.X + 7, (int)item.Y + 7), new Point((int)item.X + 7 + (int)item.LastForce.x * 3, (int)item.Y + 7 + (int)item.LastForce.y * 3));
                     }
                 }
@@ -321,7 +331,8 @@ namespace ChargesModel
                     Pen penline = new Pen(Brushes.LightBlue, 2);
                     foreach (Charge item in charges)
                     {
-                        gline.DrawLine(penline, new Point((int)item.X + 7, (int)item.Y + 7), new Point((int)item.X + 7 + (Math.Sign(item.LastForce.x) * 10), (int)item.Y + 7 + (int)item.LastForce.y / (int)item.LastForce.x * 10));
+                        if (item.IsPinned) continue;
+                        gline.DrawLine(penline, new Point((int)item.X + 7, (int)item.Y + 7), new Point((int)item.X + 7 + (int)(item.LastForce.x * 18 / ZeroAway(item.GetForce())), (int)item.Y + 7 + (int)(item.LastForce.y * 18 / ZeroAway(item.GetForce()))));
                     }
                 }
                 Blackboard.Visible = true;
@@ -337,6 +348,7 @@ namespace ChargesModel
                     Pen penline = new Pen(Brushes.PaleVioletRed, 2);
                     foreach (Charge item in charges)
                     {
+                        if (item.IsPinned) continue;
                         gline.DrawLine(penline, new Point((int)item.X + 7, (int)item.Y + 7), new Point((int)item.X + 7 + (int)item.Velocity.x * 3, (int)item.Y + 7 + (int)item.Velocity.y * 3));
                     }
                 }
@@ -350,7 +362,8 @@ namespace ChargesModel
                     Pen penline = new Pen(Brushes.PaleVioletRed, 2);
                     foreach (Charge item in charges)
                     {
-                        gline.DrawLine(penline, new Point((int)item.X + 7, (int)item.Y + 7), new Point((int)item.X + 7 + (Math.Sign(item.Velocity.x) * 10), (int)item.Y + 7 + Math.Sign(item.Velocity.y) * 10));
+                        if (item.IsPinned) continue;
+                        gline.DrawLine(penline, new Point((int)item.X + 7, (int)item.Y + 7), new Point((int)item.X + 7 + (int)(item.Velocity.x * 18 / ZeroAway(item.GetVelocity())), (int)item.Y + 7 + (int)(item.Velocity.y * 18 / ZeroAway(item.GetVelocity()))));
                     }
                 }
                 Blackboard.Visible = true;
@@ -452,7 +465,7 @@ namespace ChargesModel
 
         private void econst_TB_TextChanged(object sender, EventArgs e)
         {
-            constK = Int32.Parse(econst_TB.Text);
+            constK = float.Parse(econst_TB.Text);
         }
 
         private void Pin_Click(object sender, EventArgs e)
@@ -483,7 +496,6 @@ namespace ChargesModel
             Pin.Checked = chosen.IsPinned;
             ChargeIndicator.Text = "q = " + chosen.Energy;
             MassIndicator.Text = "m = " + chosen.Mass;
-            Text += charges[0].X.ToString();
         }
 
         private void ChangeSign_Click(object sender, EventArgs e)
@@ -757,11 +769,11 @@ namespace ChargesModel
             if (WaitSetCharge)
             {
                 SetPanel.Visible = false;
-                chosen.Energy = Int32.Parse(SetTB.Text);
+                chosen.Energy = float.Parse(SetTB.Text);
             } else
             {
                 SetPanel.Visible = false;
-                chosen.Mass = Int32.Parse(SetTB.Text);
+                chosen.Mass = float.Parse(SetTB.Text);
             }
         }
 
@@ -1117,9 +1129,15 @@ namespace ChargesModel
 
         private void ResetSimulation_Click(object sender, EventArgs e)
         {
+            restoring:
             foreach (Charge item in charges)
             {
-                item.Restore();
+                if (!item.Restore())
+                {
+                    charges.Remove(item);
+                    goto restoring;
+                    //break;
+                }
                 item.traj.Clear();
                 Draw();
             }
@@ -1228,6 +1246,31 @@ namespace ChargesModel
         private void CloseSettings_Click(object sender, EventArgs e)
         {
             panel1.Visible = false;
+        }
+
+        Charge trych;
+
+        private void SrengthMap_Click(object sender, EventArgs e)
+        {
+            Bitmap board = new Bitmap(Width, Height);
+            using (Graphics gline = Graphics.FromImage(board))
+            {
+                //gline.Clear(Color.FromArgb(40, 40, 40));
+                Pen penline = new Pen(Brushes.LightBlue, 2);
+                foreach (Charge item in charges)
+                {
+                    trych = new Charge(item.X, item.Y - 8);
+                    trych.Energy = 1 * Math.Sign(item.Energy);
+                    gline.DrawLine(penline, new Point((int)item.X + 7, (int)item.Y + 7), new Point((int)item.X + 7 + (int)item.LastForce.x * 3, (int)item.Y + 7 + (int)item.LastForce.y * 3));
+                }
+            }
+            LineMap.Visible = true;
+        }
+
+        private void timer3_Tick(object sender, EventArgs e)
+        {
+            ComputeForces(trych);
+            trych.Move();
         }
     }
 }
